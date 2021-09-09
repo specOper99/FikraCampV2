@@ -13,7 +13,7 @@ This is the official repository for the students of the second fikracamp
 
 ### Contents
 
-All the projects the are going to be done in this bootcamp:
+All the projects that going to be done in this bootcamp:
 
 - [ ] Stack - <sub><sup>Waiting for a student to push it here :D</sub></sup>
 - [ ] Queue - <sub><sup>Also waiting for a student to push it here :D</sub></sup>
