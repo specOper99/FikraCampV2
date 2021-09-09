@@ -1,7 +1,9 @@
 # FikraCampV2
 This is the official repository for the students of the second fikracamp
 
-![GitHub repo size](https://img.shields.io/github/repo-size/specoper99/fikracampv2?style=for-the-badge)
+
+![GitHub repo lines of code](https://img.shields.io/tokei/lines/github/specoper99/fikracampv2?style=for-the-badge)
+![GitHub repo size](https://img.shields.io/github/languages/code-size/specoper99/fikracampv2?style=for-the-badge)
 ![GitHub language count](https://img.shields.io/github/languages/count/specoper99/fikracampv2?style=for-the-badge)
 ![GitHub forks](https://img.shields.io/github/forks/specoper99/fikracampv2?style=for-the-badge)
 ![GitHub open issues](https://img.shields.io/github/issues/specoper99/fikracampv2?style=for-the-badge)
@@ -13,8 +15,8 @@ This is the official repository for the students of the second fikracamp
 
 All the projects the are going to be done in this bootcamp:
 
-- [ ] Stack - Waiting for a student to push it here :D
-- [ ] Queue - Also waiting for a student to push it here :D
+- [ ] Stack - <sub><sup>Waiting for a student to push it here :D</sub></sup>
+- [ ] Queue - <sub><sup>Also waiting for a student to push it here :D</sub></sup>
 - [x] Linked List
 
 ## 🤝 Instructors
