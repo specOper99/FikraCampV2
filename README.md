@@ -1,5 +1,5 @@
 # FikraCampV2
-This is the official repository for the students of the second fikracamp
+This is the official repository for the participants of the second fikracamp
 
 
 ![GitHub repo lines of code](https://img.shields.io/tokei/lines/github/specoper99/fikracampv2?style=for-the-badge)
@@ -13,10 +13,10 @@ This is the official repository for the students of the second fikracamp
 
 ### Contents
 
-All the projects the are going to be done in this bootcamp:
+All the projects that going to be done in this bootcamp:
 
-- [ ] Stack - <sub><sup>Waiting for a student to push it here :D</sub></sup>
-- [ ] Queue - <sub><sup>Also waiting for a student to push it here :D</sub></sup>
+- [ ] Stack - <sub><sup>Waiting for someone to push it here :D</sub></sup>
+- [ ] Queue - <sub><sup>Also waiting for someone to push it here :D</sub></sup>
 - [x] Linked List
 
 Week 5
