@@ -19,6 +19,9 @@ All the projects the are going to be done in this bootcamp:
 - [ ] Queue - <sub><sup>Also waiting for a student to push it here :D</sub></sup>
 - [x] Linked List
 
+Week 5
+- [x] NodeJS
+
 ## 🤝 Instructors
 
 Proudly are:
