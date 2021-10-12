@@ -1,4 +1,4 @@
-const { getAuthors: getAuthorsModel, addAuthor, getAuthorById: getAuthorByIdModel, deleteAuthor: deleteAuthorModel } = require('../models/author')
+const { getAuthors: getAuthorsModel, addAuthor, getAuthorById: getAuthorByIdModel, deleteAuthor: deleteAuthorModel, updateAuthor: updateAuthorModel } = require('../models/author')
 
 function getAuthors(req, res, next) {
     res.json(getAuthorsModel());
@@ -32,9 +32,22 @@ function createNewAuthor(req, res, next) {
     res.json(addAuthor(body));
 }
 
+function updateAuthor(req, res, next) {
+    const body = req.body;
+
+    if ((body.name) && (body.name.length < 3))
+        return res.status(400).json({ message: "Your name is too short" })
+    if ((body.age) && (body.age < 15))
+        return res.status(400).json({ message: "You are too young" })
+
+
+    res.json(updateAuthorModel(req.params.authorId, body));
+}
+
 module.exports = {
     getAuthors,
     getAuthorById,
     createNewAuthor,
     deleteAuthor,
+    updateAuthor,
 }

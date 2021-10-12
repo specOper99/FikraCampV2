@@ -2,12 +2,10 @@ const express = require('express');
 
 const app = express();
 
-const authorsRoutes = require('./routes/author')
-const bookRoutes = require('./routes/book')
+const authorsRoutes = require('./author/routes/author')
 
 
 app.use('/authors', authorsRoutes)
-app.use('/books', bookRoutes)
 
 
 app.listen(3000, 'localhost', () => {

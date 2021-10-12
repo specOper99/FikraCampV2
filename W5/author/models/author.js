@@ -41,6 +41,14 @@ const deleteAuthor = (id) => {
     writeToFile(authors)
     return deletedAuthor;
 }
+const updateAuthor = (id, updatedAuthor) => {
+    const authors = getAuthors();
+    const index = getAuthorIndexById(id);
+    if (updatedAuthor.name) authors[index].name = updatedAuthor.name;
+    if (updatedAuthor.age) authors[index].age = updatedAuthor.age;
+    writeToFile(authors)
+    return authors[index];
+}
 
 
 module.exports = {
@@ -48,4 +56,5 @@ module.exports = {
     getAuthorById,
     addAuthor,
     deleteAuthor,
+    updateAuthor,
 }
