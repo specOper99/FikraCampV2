@@ -2,25 +2,27 @@ const fs = require('fs');
 const path = require('path');
 
 class Author {
-    constructor(id, name, age) {
+    constructor(id, name, age, email, password) {
         this.id = id;
         this.name = name;
         this.age = age;
+        this.email = email;
+        this.password = password;
+        this.privileges = 0;
+        if (this.email.endsWith('@edu.iq'))
+            this.privileges = 1;
     }
 
-    static copyFromData(id, name, age) {
-        const author = new Author(id, name, age);
-        return author;
-    }
+    static copyFromData = (id, name, age, email, password) =>
+        new Author(id, name, age, email, password);
 
-    toString() {
-        return `${this.name} ${this.age}`;
-    }
+    toString = () =>
+        `${this.name} ${this.age}`;
 }
 
 function addAuthor(value) {
     const authors = getAuthors();
-    const author = Author.copyFromData(authors[authors.length - 1].id + 1, value.name, value.age);
+    const author = Author.copyFromData((authors[authors.length - 1]?.id ?? 0) + 1, value.name, value.age, value.email, value.password);
     authors.push(author);
     writeToFile(authors);
     return author;
@@ -34,6 +36,7 @@ const writeToFile = (authors) => fs.writeFileSync(
 
 const getAuthors = () => readFile();
 const getAuthorById = (id) => getAuthors().find(author => author.id == id);
+const getAuthorByCredentials = ({ email, password }) => getAuthors().find(author => author.email == email && author.password == password);
 const getAuthorIndexById = (id) => getAuthors().findIndex(author => author.id == id);
 const deleteAuthor = (id) => {
     const authors = getAuthors();
@@ -46,6 +49,7 @@ const updateAuthor = (id, updatedAuthor) => {
     const index = getAuthorIndexById(id);
     if (updatedAuthor.name) authors[index].name = updatedAuthor.name;
     if (updatedAuthor.age) authors[index].age = updatedAuthor.age;
+    if (updatedAuthor.password) authors[index].password = updatedAuthor.password;
     writeToFile(authors)
     return authors[index];
 }
@@ -57,4 +61,5 @@ module.exports = {
     addAuthor,
     deleteAuthor,
     updateAuthor,
+    getAuthorByCredentials,
 }

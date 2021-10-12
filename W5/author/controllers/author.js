@@ -27,7 +27,14 @@ function createNewAuthor(req, res, next) {
         return res.status(400).json({ message: "Your age is required" })
     if (body.age < 15)
         return res.status(400).json({ message: "You are too young" })
-
+    if (!body.email)
+        return res.status(400).json({ message: "Your email is required" })
+    if ((body.email.length < 3) || (body.email.indexOf("@") === -1))
+        return res.status(400).json({ message: "Your email is invalid" })
+    if (!body.password)
+        return res.status(400).json({ message: "Your password is required" })
+    if (body.password.length < 8)
+        return res.status(400).json({ message: "Your password is too short" })
 
     res.json(addAuthor(body));
 }
@@ -39,6 +46,8 @@ function updateAuthor(req, res, next) {
         return res.status(400).json({ message: "Your name is too short" })
     if ((body.age) && (body.age < 15))
         return res.status(400).json({ message: "You are too young" })
+    if ((body.password) && (body.password.length < 8))
+        return res.status(400).json({ message: "Your password is too short" })
 
 
     res.json(updateAuthorModel(req.params.authorId, body));

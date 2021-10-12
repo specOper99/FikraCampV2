@@ -1,1 +1,1 @@
-[{"id":1,"name":"Mohammad","age":22},{"id":3,"name":"Ali","age":22},{"id":4,"name":"Mohammad","age":22},{"id":5,"name":"Mohammad","age":22},{"id":6,"name":"Mohammad","age":22},{"id":8,"name":"Mohammad","age":22},{"id":9,"name":"Mohammad","age":22},{"id":10,"name":"Mohammad","age":22}]
+[{"id":1,"name":"Mohammad","age":22,"email":"some-mail@mail.com","password":"12345678","privileges":0},{"id":2,"name":"Mohammad","age":22,"email":"some-mail@edu.iq","password":"abcdefghij","privileges":1}]
