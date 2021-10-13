@@ -1,6 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
+const bcrypt = require('bcrypt')
+
 class Author {
     constructor(id, name, age, email, password) {
         this.id = id;
@@ -22,10 +24,16 @@ class Author {
 
 function addAuthor(value) {
     const authors = getAuthors();
-    const author = Author.copyFromData((authors[authors.length - 1]?.id ?? 0) + 1, value.name, value.age, value.email, value.password);
-    authors.push(author);
-    writeToFile(authors);
-    return author;
+    try {
+        const password = bcrypt.hashSync(value.password, 7)
+        const author = Author.copyFromData((authors[authors.length - 1]?.id ?? 0) + 1, value.name, value.age, value.email, password);
+        authors.push(author);
+        writeToFile(authors);
+        return author;
+    } catch (err) {
+        return { message: err }
+    }
+
 }
 
 const readFile = () => JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'authors.json')));
@@ -36,7 +44,8 @@ const writeToFile = (authors) => fs.writeFileSync(
 
 const getAuthors = () => readFile();
 const getAuthorById = (id) => getAuthors().find(author => author.id == id);
-const getAuthorByCredentials = ({ email, password }) => getAuthors().find(author => author.email == email && author.password == password);
+const getAuthorByCredentials = ({ email, password }) => getAuthors().find(author =>author.email == email && bcrypt.compareSync(password, author.password));
+
 const getAuthorIndexById = (id) => getAuthors().findIndex(author => author.id == id);
 const deleteAuthor = (id) => {
     const authors = getAuthors();

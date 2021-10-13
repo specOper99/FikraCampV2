@@ -1,18 +1,15 @@
 const { addAuthor, getAuthorByCredentials } = require('../../author/models/author')
 const jwt = require('jsonwebtoken');
+const { validationResult } = require('express-validator');
+const { formatBodyErrorsResponse } = require('../../shared/formatResponse')
 
 function login(req, res, next) {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ message: formatBodyErrorsResponse(errors) })
+    }
+
     const body = req.body;
-
-    if (!body.email)
-        return res.status(400).json({ message: "Your email is required" })
-    if ((body.email.length < 3) || (body.email.indexOf("@") === -1))
-        return res.status(400).json({ message: "Your email is invalid" })
-    if (!body.password)
-        return res.status(400).json({ message: "Your password is required" })
-    if (body.password.length < 8)
-        return res.status(400).json({ message: "Your password is too short" })
-
 
     const author = getAuthorByCredentials(body);
 
@@ -25,7 +22,7 @@ function login(req, res, next) {
     },
         `${process.env.secret}`,
         {
-            expiresIn: 30,
+            expiresIn: 30 * 60,
         });
     res.json({
         id: author.id,
