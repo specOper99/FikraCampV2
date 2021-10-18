@@ -11,7 +11,7 @@ class Author {
         this.email = email;
         this.password = password;
         this.privileges = 0;
-        if (this.email.endsWith('@edu.iq'))
+        if (`${this.email}`.endsWith('@edu.iq'))
             this.privileges = 1;
     }
 
@@ -44,7 +44,7 @@ const writeToFile = (authors) => fs.writeFileSync(
 
 const getAuthors = () => readFile();
 const getAuthorById = (id) => getAuthors().find(author => author.id == id);
-const getAuthorByCredentials = ({ email, password }) => getAuthors().find(author =>author.email == email && bcrypt.compareSync(password, author.password));
+const getAuthorByCredentials = ({ email, password }) => getAuthors().find(author => author.email == email && bcrypt.compareSync(password, author.password));
 
 const getAuthorIndexById = (id) => getAuthors().findIndex(author => author.id == id);
 const deleteAuthor = (id) => {
@@ -65,6 +65,7 @@ const updateAuthor = (id, updatedAuthor) => {
 
 
 module.exports = {
+    Author,
     getAuthors,
     getAuthorById,
     addAuthor,
