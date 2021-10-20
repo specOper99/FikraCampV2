@@ -12,9 +12,9 @@ function getAuthorById(req, res, next) {
 }
 
 function deleteAuthor(req, res, next) {
-    if (getAuthorByIdModel(req.params.authorId))
-        return res.json(deleteAuthorModel(req.params.authorId));
-    return res.json({ message: 'Author not found' });
+    deleteAuthorModel(req.params.authorId).then(deletedAuthor =>
+        res.status(deletedAuthor ? 202 : 404).json(deletedAuthor ?? { message: 'Author not found' })
+    )
 }
 
 async function createNewAuthor(req, res, next) {
@@ -52,8 +52,9 @@ function updateAuthor(req, res, next) {
     if ((body.password) && (body.password.length < 8))
         return res.status(400).json({ message: "Your password is too short" })
 
-
-    res.json(updateAuthorModel(req.params.authorId, body));
+    updateAuthorModel(req.params.authorId, body).then(updatedAuthor =>
+        res.json(updatedAuthor)
+    )
 }
 
 module.exports = {

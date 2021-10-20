@@ -61,24 +61,27 @@ const authorService = () => {
     //////////////////////////////////////////////////////////////////////////////////////////
 
     const deleteAuthor =
-        (id, authorRepository = getRepository(Author)) => {
-            const authors = getAuthors();
-            const deletedAuthor = authors.splice(getAuthorIndexById(id), 1)
-            writeToFile(authors)
-            return deletedAuthor;
+        async (id, authorRepository = getRepository(Author)) => {
+            return await authorRepository.delete(id);
         }
 
     //////////////////////////////////////////////////////////////////////////////////////////
 
     const updateAuthor =
-        (id, updatedAuthor, authorRepository = getRepository(Author)) => {
-            const authors = getAuthors();
-            const index = getAuthorIndexById(id);
-            if (updatedAuthor.name) authors[index].name = updatedAuthor.name;
-            if (updatedAuthor.age) authors[index].age = updatedAuthor.age;
-            if (updatedAuthor.password) authors[index].password = updatedAuthor.password;
-            writeToFile(authors)
-            return authors[index];
+        async (id, updatedAuthor, authorRepository = getRepository(Author)) => {
+        //     return await authorRepository.query('Update author set name = ":name" , age = ":age" , password = ":password"  where id = :id ', {
+        //         name: updatedAuthor.name,
+        //         age: updatedAuthor.age,
+        //         password: updatedAuthor.password,
+        //         id: id,
+        //     })
+
+            const author = await getAuthorById(id);
+            if (updatedAuthor.name) author.name = updatedAuthor.name;
+            if (updatedAuthor.age) author.age = updatedAuthor.age;
+            if (updatedAuthor.password) author.password = updatedAuthor.password;
+
+            return await authorRepository.save(author)
         }
 
 
