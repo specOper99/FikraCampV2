@@ -30,7 +30,7 @@ function login(req, res, next) {
     });
 }
 
-function signup(req, res, next) {
+async function signup(req, res, next) {
     const body = req.body;
 
     if (!body.email)
@@ -50,7 +50,7 @@ function signup(req, res, next) {
     if (body.age < 15)
         return res.status(400).json({ message: "You are too young" })
 
-    res.json(addAuthor(body));
+    res.json(await addAuthor(body));
 }
 
 module.exports = {

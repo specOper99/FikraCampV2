@@ -23,12 +23,15 @@ createConnection({
     database: "fikra",
     entities: [
         require('./author/entity/author'),
+        require('./book/entity/book'),
     ],
+    logger: 'simple-console',
+
     synchronize: true,
 }).then(connection => {
     app.use('/', authenticationRoutes)
 
-    app.use(isAuth);
+    // app.use(isAuth);
 
     app.use('/authors', authorsRoutes)
     app.use('/books', booksRoutes)
