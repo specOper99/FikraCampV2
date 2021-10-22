@@ -30,9 +30,10 @@ createConnection({
     synchronize: true,
 }).then(connection => {
     app.use('/', authenticationRoutes)
+    const path = require('path');
+    app.use('/image', express.static(path.join(__dirname, 'public', 'images')))
 
     // app.use(isAuth);
-
     app.use('/authors', authorsRoutes)
     app.use('/books', booksRoutes)
 

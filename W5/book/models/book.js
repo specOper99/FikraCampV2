@@ -4,15 +4,16 @@ const { getAuthorById } = require('../../author/models/author')
 
 
 class Book {
-    constructor(id, title, price, authorId) {
+    constructor(id, title, price, imagePath, authorId) {
         this.id = id;
         this.title = title;
         this.price = price;
+        this.imagePath = imagePath;
         this.authorId = authorId;
     }
 
-    static copyFromData = (id, title, price, authorId) =>
-        new Book(id, title, price, authorId);
+    static copyFromData = (id, title, price, imagePath, authorId) =>
+        new Book(id, title, price, imagePath, authorId);
 
     toString = () =>
         `${this.title}: ${this.price}, written by ${this.authorId}`;
@@ -26,6 +27,7 @@ function addBook(value) {
         (books[books.length - 1]?.id ?? 0) + 1,
         value.title,
         value.price,
+        value.imagePath,
         value.authorId);
     books.push(book);
     writeToFile(books);

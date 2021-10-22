@@ -19,6 +19,8 @@ function deleteBook(req, res, next) {
 function createNewBook(req, res, next) {
     const body = req.body;
 
+    console.log(req.file);
+
     if (!body.title)
         return res.status(400).json({ message: "Your title is required" })
     if (body.title.length < 3)
@@ -30,7 +32,7 @@ function createNewBook(req, res, next) {
     if ((!body.authorId) || (isNaN(parseInt(body.authorId))))
         return res.status(400).json({ message: "Not valid author id" })
 
-    res.json(addBook(body));
+    res.json(addBook({ ...body, imagePath: req.file.path }));
 }
 
 function updateBook(req, res, next) {

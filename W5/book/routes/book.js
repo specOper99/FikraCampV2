@@ -1,4 +1,19 @@
 const express = require('express');
+const path = require('path');
+const multer = require('multer');
+
+const upload = multer({
+    storage: multer.diskStorage({
+        destination: function (req, file, cb) {
+            cb(null, '/Users/mohammadnawfal/Desktop/Fikra Camp/V2/W5/public/images')
+            // cb(null, path.join(__dirname, '..', '..', 'public', 'images'))
+        },
+        filename: function (req, file, cb) {
+            const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+            cb(null, file.fieldname + '-' + uniqueSuffix + '.' + file.mimetype.split('/')[1]);
+        }
+    })
+});
 
 const router = express.Router();
 
@@ -9,7 +24,8 @@ router.delete('/:bookId', deleteBook)
 
 router.get('/', getBooks);
 
-router.use(express.json());
+// router.use(express.json());
+router.use(upload.single('image'));
 
 router.post('/', createNewBook)
 router.put('/:bookId', updateBook);

@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt')
 
 class Author {
     constructor(name, age, email, password) {
+        this.id;
         this.name = name;
         this.age = age;
         this.email = email;
@@ -23,10 +24,6 @@ class Author {
 
 const { getRepository } = require('typeorm');
 
-const writeToFile = (authors) => fs.writeFileSync(
-    path.join(__dirname, '..', 'data', 'authors.json'),
-    JSON.stringify(authors)
-);
 
 
 const authorService = () => {
@@ -55,11 +52,6 @@ const authorService = () => {
 
     //////////////////////////////////////////////////////////////////////////////////////////
 
-    const getAuthorIndexById =
-        (id, authorRepository = getRepository(Author)) => getAuthors().findIndex(author => author.id == id);
-
-    //////////////////////////////////////////////////////////////////////////////////////////
-
     const deleteAuthor =
         async (id, authorRepository = getRepository(Author)) => {
             return await authorRepository.delete(id);
@@ -69,12 +61,12 @@ const authorService = () => {
 
     const updateAuthor =
         async (id, updatedAuthor, authorRepository = getRepository(Author)) => {
-        //     return await authorRepository.query('Update author set name = ":name" , age = ":age" , password = ":password"  where id = :id ', {
-        //         name: updatedAuthor.name,
-        //         age: updatedAuthor.age,
-        //         password: updatedAuthor.password,
-        //         id: id,
-        //     })
+            //     return await authorRepository.query('Update author set name = ":name" , age = ":age" , password = ":password"  where id = :id ', {
+            //         name: updatedAuthor.name,
+            //         age: updatedAuthor.age,
+            //         password: updatedAuthor.password,
+            //         id: id,
+            //     })
 
             const author = await getAuthorById(id);
             if (updatedAuthor.name) author.name = updatedAuthor.name;
