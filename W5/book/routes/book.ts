@@ -1,6 +1,6 @@
-const express = require('express');
-const path = require('path');
-const multer = require('multer');
+import * as express from 'express';
+// import { join } from 'path';
+import * as multer from 'multer';
 
 const upload = multer({
     storage: multer.diskStorage({
@@ -30,4 +30,4 @@ router.use(upload.single('image'));
 router.post('/', createNewBook)
 router.put('/:bookId', updateBook);
 
-module.exports = router;
+export default router;

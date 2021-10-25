@@ -1,7 +1,7 @@
 const { EntitySchema } = require('typeorm');
 const { Author } = require('../models/author')
 
-module.exports = new EntitySchema({
+export default new EntitySchema({
     columns: {
         id: {
             type: "int",

@@ -1,23 +1,33 @@
-const { getAuthors: getAuthorsModel, addAuthor, getAuthorById: getAuthorByIdModel, deleteAuthor: deleteAuthorModel, updateAuthor: updateAuthorModel } = require('../models/author')
+import model, { Author } from '../models/author';
 
-function getAuthors(req, res, next) {
-    getAuthorsModel().then(authors => res.json(authors));
+
+const { getAuthors: getAuthorsModel, addAuthor, getAuthorById: getAuthorByIdModel, deleteAuthor: deleteAuthorModel, updateAuthor: updateAuthorModel } = model;
+
+
+import { Request, Response, NextFunction } from 'express';
+
+function getAuthors(req: Request, res: Response, next: NextFunction) {
+    getAuthorsModel().then((authors: Author) => res.json(authors));
 }
 
-function getAuthorById(req, res, next) {
-    getAuthorByIdModel(req.params.authorId).then(authors =>
-        res.status(authors ? 200 : 404).json(authors ?? {
+function getAuthorById(req: Request, res: Response, next: NextFunction) {
+    getAuthorByIdModel(req.params.authorId).then((authors: Author[]) => {
+        res.status(authors ? 200 : 404).json(authors ? authors : {
             message: "No author found"
-        }));
+        })
+    });
 }
 
-function deleteAuthor(req, res, next) {
-    deleteAuthorModel(req.params.authorId).then(deletedAuthor =>
-        res.status(deletedAuthor ? 202 : 404).json(deletedAuthor ?? { message: 'Author not found' })
+function deleteAuthor(req: Request, res: Response, next: NextFunction) {
+    deleteAuthorModel(req.params.authorId).then(
+        (deletedAuthor: any) => {
+            res.status(deletedAuthor ? 202 : 404).json(deletedAuthor ? deletedAuthor :
+                { message: 'Author not found' });
+        }
     )
 }
 
-async function createNewAuthor(req, res, next) {
+async function createNewAuthor(req: Request, res: Response, next: NextFunction) {
     const body = req.body;
 
     if (!body.name)
@@ -37,12 +47,12 @@ async function createNewAuthor(req, res, next) {
     if (body.password.length < 8)
         return res.status(400).json({ message: "Your password is too short" })
 
-    await addAuthor(body).then(author => {
+    await addAuthor(body).then((author: Author) => {
         res.json(author);
     })
 }
 
-function updateAuthor(req, res, next) {
+function updateAuthor(req: Request, res: Response, next: NextFunction) {
     const body = req.body;
 
     if ((body.name) && (body.name.length < 3))
@@ -52,12 +62,14 @@ function updateAuthor(req, res, next) {
     if ((body.password) && (body.password.length < 8))
         return res.status(400).json({ message: "Your password is too short" })
 
-    updateAuthorModel(req.params.authorId, body).then(updatedAuthor =>
-        res.json(updatedAuthor)
-    )
+    updateAuthorModel(req.params.authorId, body).then(
+        (updatedAuthor: Author | undefined) => {
+            res.status(updatedAuthor ? 200 : 404).json(updatedAuthor ? updatedAuthor :
+                { message: "No author found" });
+        });
 }
 
-module.exports = {
+export {
     getAuthors,
     getAuthorById,
     createNewAuthor,

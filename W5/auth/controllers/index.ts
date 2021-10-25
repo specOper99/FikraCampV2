@@ -1,9 +1,12 @@
-const { addAuthor, getAuthorByCredentials } = require('../../author/models/author')
-const jwt = require('jsonwebtoken');
-const { validationResult } = require('express-validator');
-const { formatBodyErrorsResponse } = require('../../shared/formatResponse')
+import { sign } from 'jsonwebtoken';
+import { validationResult } from 'express-validator';
+import { NextFunction, Request, Response } from 'express';
 
-function login(req, res, next) {
+import model from '../../author/models/author';
+const { addAuthor, getAuthorByCredentials } = model;
+import { formatBodyErrorsResponse } from '../../shared/formatResponse';
+
+export function login(req: Request, res: Response, next: NextFunction) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ message: formatBodyErrorsResponse(errors) })
@@ -16,7 +19,7 @@ function login(req, res, next) {
     if (!author)
         return res.status(404).json({ message: "No author with this credentials\nPlease signup!" })
 
-    const token = jwt.sign({
+    const token = sign({
         id: author.id,
         privileges: author.privileges,
     },
@@ -30,7 +33,7 @@ function login(req, res, next) {
     });
 }
 
-async function signup(req, res, next) {
+export async function signup(req: Request, res: Response, next: NextFunction) {
     const body = req.body;
 
     if (!body.email)
@@ -51,9 +54,4 @@ async function signup(req, res, next) {
         return res.status(400).json({ message: "You are too young" })
 
     res.json(await addAuthor(body));
-}
-
-module.exports = {
-    login,
-    signup,
 }

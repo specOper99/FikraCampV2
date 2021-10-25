@@ -1,18 +1,22 @@
-const express = require('express');
+import * as express from 'express';
+// require('dotenv').config();
+import isAuth from './middlewares/isAuth';
+
+import authorsRoutes from './author/routes/author';
+import booksRoutes from './book/routes/book';
+import authenticationRoutes from './auth/routes/';
+
+import Book from './book/entity/book';
+import Author from './author/entity/author';
+
+import { createConnection } from "typeorm";
+
 
 const app = express();
-require('dotenv').config();
-
-const isAuth = require('./middlewares/isAuth');
-
-const authorsRoutes = require('./author/routes/author')
-const booksRoutes = require('./book/routes/book')
-const authenticationRoutes = require('./auth/routes/')
 
 // ! U can use the middleware anywhere inside the express app
 // app.use(express.json()) 
 
-const { createConnection } = require("typeorm");
 
 createConnection({
     type: "mysql",
@@ -22,13 +26,14 @@ createConnection({
     password: "",
     database: "fikra",
     entities: [
-        require('./author/entity/author'),
-        require('./book/entity/book'),
+        Book,
+        Author,
     ],
     logger: 'simple-console',
-
+    // logging: true,
     synchronize: true,
 }).then(connection => {
+
     app.use('/', authenticationRoutes)
     const path = require('path');
     app.use('/image', express.static(path.join(__dirname, 'public', 'images')))

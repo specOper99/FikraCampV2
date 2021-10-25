@@ -1,7 +1,7 @@
 const { EntitySchema } = require('typeorm');
 const { Book } = require('../models/book')
 
-module.exports = new EntitySchema({
+export default new EntitySchema({
     columns: {
         id: {
             type: "int",
@@ -19,6 +19,7 @@ module.exports = new EntitySchema({
         },
         authorId: {
             type: "int",
+            nullable: false
         },
     },
     name: "book",

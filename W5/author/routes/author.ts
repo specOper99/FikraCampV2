@@ -1,6 +1,6 @@
-const express = require('express');
+import { json, Router } from 'express';
 
-const router = express.Router();
+const router = Router();
 
 const { getAuthors, getAuthorById, createNewAuthor, deleteAuthor, updateAuthor } = require('../controllers/author');
 const isAdmin = require('../../middlewares/isAdmin');
@@ -10,11 +10,11 @@ router.delete('/:authorId', deleteAuthor)
 
 router.get('/', getAuthors);
 
-router.use(express.json());
+router.use(json());
 
 router.post('/',
     isAdmin,
     createNewAuthor)
 router.put('/:authorId', updateAuthor);
 
-module.exports = router;
+export default router;

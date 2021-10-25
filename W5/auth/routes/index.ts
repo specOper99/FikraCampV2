@@ -1,9 +1,9 @@
-const express = require('express');
-const { body } = require('express-validator')
+import * as express from 'express';
+import { body } from 'express-validator'
 
 const router = express.Router();
 
-const { login, signup } = require('../controllers/');
+import { login, signup } from '../controllers/';
 
 
 router.use(express.json());
@@ -14,4 +14,4 @@ router.post('/login',
     login)
 router.post('/signup', signup);
 
-module.exports = router;
+export default router;
