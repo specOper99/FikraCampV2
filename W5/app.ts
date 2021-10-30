@@ -1,5 +1,13 @@
 import * as express from 'express';
-// require('dotenv').config();
+import * as cors from 'cors';
+
+//* █████████████████████████████████████████████████████╗
+//* Loads the environment variables from the .env file ██╣║
+import { config } from 'dotenv';                    //*██╣║
+//*                                                    ██╣║
+config();                                           //*██╣║
+//* █████████████████████████████████████████████████████╝
+
 import isAuth from './middlewares/isAuth';
 
 import authorsRoutes from './author/routes/author';
@@ -15,6 +23,8 @@ import { createConnection } from "typeorm";
 const app = express();
 
 // ! U can use the middleware anywhere inside the express app
+app.use(cors());
+
 // app.use(express.json()) 
 
 
@@ -34,6 +44,7 @@ createConnection({
     synchronize: true,
 }).then(connection => {
 
+
     app.use('/', authenticationRoutes)
     const path = require('path');
     app.use('/image', express.static(path.join(__dirname, 'public', 'images')))
@@ -41,9 +52,7 @@ createConnection({
     app.use(isAuth);
     app.use('/authors', authorsRoutes)
     app.use('/books', booksRoutes)
-
-
-    app.listen(3000, 'localhost', () => {
-        console.log("the server link is " + 'http://localhost:3000');
+    app.listen(5500, 'localhost', () => {
+        console.log("the server link is " + 'http://localhost:5500');
     })
 }).catch(error => console.log(error));

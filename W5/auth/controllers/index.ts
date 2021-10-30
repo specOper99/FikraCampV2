@@ -19,6 +19,8 @@ export function login(req: Request, res: Response, next: NextFunction) {
     if (!author)
         return res.status(404).json({ message: "No author with this credentials\nPlease signup!" })
 
+    console.log(process.env.secret);
+
     const token = sign({
         id: author.id,
         privileges: author.privileges,
@@ -53,5 +55,18 @@ export async function signup(req: Request, res: Response, next: NextFunction) {
     if (body.age < 15)
         return res.status(400).json({ message: "You are too young" })
 
-    res.json(await addAuthor(body));
+    const author = await addAuthor(body);
+    const token = sign({
+        id: author.id,
+        privileges: author.privileges,
+    },
+        `${process.env.secret}`,
+        {
+            expiresIn: 30 * 60,
+        });
+    res.json({
+        message: "user successfully created",
+        id: author.id,
+        token,
+    });
 }
