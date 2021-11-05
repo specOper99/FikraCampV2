@@ -35,6 +35,7 @@ const authorService = (): {
     addAuthor: Function,
     getAuthors: Function,
     getAuthorById: Function,
+    getAuthorByEmail: Function,
     getAuthorByCredentials: Function,
     deleteAuthor: Function,
     updateAuthor: Function,
@@ -67,12 +68,18 @@ const authorService = (): {
     const getAuthorByCredentials =
         async ({ email, password }: { email: string, password: string }, authorRepository =
             getRepository(Author)): Promise<Author | undefined> => {
-            const author = await authorRepository.findOne({ where: { email } });
+            const author = await getAuthorByEmail(email);
             if ((!author) || (!(await compare(password, author!.password)))) {
                 return undefined;
             }
             return author;
         };
+
+    const getAuthorByEmail = async (email: string, authorRepository =
+        getRepository(Author)): Promise<Author | undefined> => {
+        const author = await authorRepository.findOne({ where: { email } });
+        return author;
+    };
 
     //////////////////////////////////////////////////////////////////////////////////////////
 
@@ -112,6 +119,7 @@ const authorService = (): {
         addAuthor,
         getAuthors,
         getAuthorById,
+        getAuthorByEmail,
         getAuthorByCredentials,
         deleteAuthor,
         updateAuthor,

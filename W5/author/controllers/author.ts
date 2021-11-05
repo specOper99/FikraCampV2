@@ -1,7 +1,9 @@
 import model, { Author } from '../models/author';
 
 
-const { getAuthors: getAuthorsModel, addAuthor, getAuthorById: getAuthorByIdModel, deleteAuthor: deleteAuthorModel, updateAuthor: updateAuthorModel } = model;
+const { getAuthors: getAuthorsModel, addAuthor, getAuthorById: getAuthorByIdModel,
+    getAuthorByEmail: getAuthorByEmailModel, deleteAuthor: deleteAuthorModel,
+    updateAuthor: updateAuthorModel } = model;
 
 
 import { Request, Response, NextFunction } from 'express';
@@ -46,6 +48,9 @@ async function createNewAuthor(req: Request, res: Response, next: NextFunction) 
         return res.status(400).json({ message: "Your password is required" })
     if (body.password.length < 8)
         return res.status(400).json({ message: "Your password is too short" })
+
+    if (await getAuthorByEmailModel(body.email))
+        return res.status(400).json({ message: "This email is already used" });
 
     await addAuthor(body).then((author: Author) => {
         res.json(author);

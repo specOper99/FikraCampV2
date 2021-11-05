@@ -3,7 +3,7 @@ import { validationResult } from 'express-validator';
 import { NextFunction, Request, Response } from 'express';
 
 import model from '../../author/models/author';
-const { addAuthor, getAuthorByCredentials } = model;
+const { addAuthor, getAuthorByCredentials, getAuthorByEmail: getAuthorByEmailModel } = model;
 import { formatBodyErrorsResponse } from '../../shared/formatResponse';
 
 export async function login(req: Request, res: Response, next: NextFunction) {
@@ -54,6 +54,9 @@ export async function signup(req: Request, res: Response, next: NextFunction) {
         return res.status(400).json({ message: "Your age is required" })
     if (body.age < 15)
         return res.status(400).json({ message: "You are too young" })
+
+    if (await getAuthorByEmailModel(body.email))
+        return res.status(400).json({ message: "This email is already used" });
 
     const author = await addAuthor(body);
     const token = sign({
