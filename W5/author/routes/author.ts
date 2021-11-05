@@ -2,8 +2,8 @@ import { json, Router } from 'express';
 
 const router = Router();
 
-const { getAuthors, getAuthorById, createNewAuthor, deleteAuthor, updateAuthor } = require('../controllers/author');
-const isAdmin = require('../../middlewares/isAdmin');
+import { getAuthors, getAuthorById, createNewAuthor, deleteAuthor, updateAuthor } from '../controllers/author';
+import isAdmin from '../../middlewares/isAdmin';
 
 router.get('/:authorId', getAuthorById)
 router.delete('/:authorId', deleteAuthor)

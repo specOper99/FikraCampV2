@@ -1,5 +1,5 @@
-const { EntitySchema } = require('typeorm');
-const { Author } = require('../models/author')
+import { EntitySchema } from 'typeorm';
+import { Author } from '../models/author';
 
 export default new EntitySchema({
     columns: {

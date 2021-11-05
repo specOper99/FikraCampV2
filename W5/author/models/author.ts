@@ -4,6 +4,7 @@ import { getRepository } from 'typeorm';
 
 
 export class Author {
+    id?: number;
     name: string;
     age: number;
     email: string;

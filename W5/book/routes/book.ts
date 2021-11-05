@@ -2,6 +2,9 @@ import * as express from 'express';
 // import { join } from 'path';
 import * as multer from 'multer';
 
+import { getBooks, getBookById, createNewBook, deleteBook, updateBook } from '../controllers/Book';
+
+
 const upload = multer({
     storage: multer.diskStorage({
         destination: function (req, file, cb) {
@@ -17,7 +20,6 @@ const upload = multer({
 
 const router = express.Router();
 
-const { getBooks, getBookById, createNewBook, deleteBook, updateBook } = require('../controllers/Book');
 
 router.get('/:bookId', getBookById)
 router.delete('/:bookId', deleteBook)

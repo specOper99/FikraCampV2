@@ -1,5 +1,5 @@
-const { EntitySchema } = require('typeorm');
-const { Book } = require('../models/book')
+import { EntitySchema } from 'typeorm';
+import { Book } from '../models/book';
 
 export default new EntitySchema({
     columns: {
@@ -15,6 +15,10 @@ export default new EntitySchema({
         },
         price: {
             type: "float",
+            nullable: false,
+        },
+        imagePath: {
+            type: "varchar",
             nullable: false,
         },
         authorId: {

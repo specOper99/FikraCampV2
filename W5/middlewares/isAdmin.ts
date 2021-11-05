@@ -6,4 +6,4 @@ function isAdmin(req: Request, res: Response, next: NextFunction) {
     next();
 }
 
-module.exports = isAdmin
+export default isAdmin;

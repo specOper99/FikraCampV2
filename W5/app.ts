@@ -1,5 +1,6 @@
 import * as express from 'express';
 import * as cors from 'cors';
+import { join } from 'path';
 
 //* █████████████████████████████████████████████████████╗
 //* Loads the environment variables from the .env file ██╣║
@@ -40,14 +41,13 @@ createConnection({
         Author,
     ],
     logger: 'simple-console',
-    // logging: true,
+    logging: true,
     synchronize: true,
 }).then(connection => {
 
 
     app.use('/', authenticationRoutes)
-    const path = require('path');
-    app.use('/image', express.static(path.join(__dirname, 'public', 'images')))
+    app.use('/images', express.static(join(__dirname, 'public', 'images')))
 
     app.use(isAuth);
     app.use('/authors', authorsRoutes)

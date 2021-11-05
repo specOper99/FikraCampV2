@@ -7,6 +7,9 @@ function isAuth(req: Request, res: Response, next: NextFunction) {
         return res.json({ message: 'Authorization token is required' });
 
     const token = req.headers['authorization'].split(' ')[1];
+
+    if (!token)
+        return res.json({ message: 'Authorization token is required' });
     try {
         const payload = verify(token, `${process.env.secret}`);
         req.userPrivileges = (payload as { privileges: number }).privileges;

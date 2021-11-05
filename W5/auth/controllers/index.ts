@@ -6,7 +6,7 @@ import model from '../../author/models/author';
 const { addAuthor, getAuthorByCredentials } = model;
 import { formatBodyErrorsResponse } from '../../shared/formatResponse';
 
-export function login(req: Request, res: Response, next: NextFunction) {
+export async function login(req: Request, res: Response, next: NextFunction) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ message: formatBodyErrorsResponse(errors) })
@@ -14,12 +14,12 @@ export function login(req: Request, res: Response, next: NextFunction) {
 
     const body = req.body;
 
-    const author = getAuthorByCredentials(body);
+    const author = await getAuthorByCredentials(body);
 
     if (!author)
-        return res.status(404).json({ message: "No author with this credentials\nPlease signup!" })
+        return res.status(400).json({ message: 'Invalid credentials' });
 
-    console.log(process.env.secret);
+    // console.log(process.env.directTokenExpiryTime, +process.env.directTokenExpiryTime!);
 
     const token = sign({
         id: author.id,
@@ -27,7 +27,7 @@ export function login(req: Request, res: Response, next: NextFunction) {
     },
         `${process.env.secret}`,
         {
-            expiresIn: 30 * 60,
+            expiresIn: +process.env.directTokenExpiryTime!,
         });
     res.json({
         id: author.id,
@@ -62,7 +62,7 @@ export async function signup(req: Request, res: Response, next: NextFunction) {
     },
         `${process.env.secret}`,
         {
-            expiresIn: 30 * 60,
+            expiresIn: eval(process.env.tokenExpiryTime!),
         });
     res.json({
         message: "user successfully created",

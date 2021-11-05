@@ -23,6 +23,11 @@ function deleteBook(req: Request, res: Response, next: NextFunction) {
 }
 
 function createNewBook(req: Request, res: Response, next: NextFunction) {
+
+    if (!req.file) {
+        return res.status(400).json({ message: "No image provided" });
+    }
+
     const body = req.body;
 
     if (!body.title)
@@ -36,7 +41,7 @@ function createNewBook(req: Request, res: Response, next: NextFunction) {
     if ((!body.authorId) || (isNaN(parseInt(body.authorId))))
         return res.status(400).json({ message: "Not valid author id" })
 
-    addBook({ ...body, imagePath: req.file!.path }).then(
+    addBook({ ...body, imagePath: req.file.path.substring(req.file.path.indexOf('/images')) }).then(
         (book: Book | { message: string }) => res.json(book)
     );
 }

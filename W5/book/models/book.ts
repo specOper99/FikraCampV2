@@ -2,6 +2,7 @@ import { DeleteResult, getRepository, Repository } from 'typeorm';
 import authorModel from '../../author/models/author';
 
 export class Book {
+    id?: number;
     title: string;
     price: number;
     imagePath: string;
@@ -41,7 +42,15 @@ const bookService = () => {
         return await bookRepository.save(book);
     }
 
-    const getBooks = async (bookRepository: Repository<Book> = getRepository('Book')) => await bookRepository.find();
+    const getBooks = async (bookRepository: Repository<Book> = getRepository('Book')) => await bookRepository.find({
+        select: [
+            'id',
+            'title',
+            'price',
+            'imagePath',
+            'authorId',
+        ],
+    });
     const getBookById = async (id: number, bookRepository: Repository<Book> = getRepository('Book')) => await bookRepository.findOne(id);
     const deleteBook = async (id: number, bookRepository: Repository<Book> = getRepository('Book')): Promise<DeleteResult | undefined> => await bookRepository.delete(id);
     const updateBook = async (id: number, updatedBook: {
