@@ -13,7 +13,7 @@ function isAuth(req: Request, res: Response, next: NextFunction) {
     try {
         const payload = verify(token, `${process.env.secret}`);
         req.userPrivileges = (payload as { privileges: number }).privileges;
-        next()
+        next();
     } catch (error) {
         res.json({ message: "Token is invalid" });
     }

@@ -2,6 +2,10 @@ import * as express from 'express';
 import * as cors from 'cors';
 import { join } from 'path';
 
+
+// ! Danger
+// ? Primary
+// TODO make them smile :)
 //* █████████████████████████████████████████████████████╗
 //* Loads the environment variables from the .env file ██╣║
 import { config } from 'dotenv';                    //*██╣║
@@ -20,7 +24,7 @@ import Author from './author/entity/author';
 
 import { createConnection } from "typeorm";
 
-
+// create backend application
 const app = express();
 
 // ! U can use the middleware anywhere inside the express app
@@ -28,7 +32,7 @@ app.use(cors());
 
 // app.use(express.json()) 
 
-
+// creates connection with the database
 createConnection({
     type: "mysql",
     host: "localhost",
@@ -47,8 +51,11 @@ createConnection({
 
 
     app.use('/', authenticationRoutes)
+    // we used express static middleware here to serve static files
     app.use('/images', express.static(join(__dirname, 'public', 'images')))
 
+    // is a middleware for checking whether 
+    // the user is logged in or not
     app.use(isAuth);
     app.use('/authors', authorsRoutes)
     app.use('/books', booksRoutes)

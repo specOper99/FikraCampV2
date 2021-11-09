@@ -6,15 +6,18 @@ import { getAuthors, getAuthorById, createNewAuthor, deleteAuthor, updateAuthor 
 import isAdmin from '../../middlewares/isAdmin';
 
 router.get('/:authorId', getAuthorById)
-router.delete('/:authorId', deleteAuthor)
-
 router.get('/', getAuthors);
+
+router.delete('/:authorId', deleteAuthor)
 
 router.use(json());
 
+// a hand written middleware for checking the permissions
+router.use(isAdmin);
+
 router.post('/',
-    isAdmin,
     createNewAuthor)
+
 router.put('/:authorId', updateAuthor);
 
 export default router;

@@ -6,6 +6,9 @@ const router = express.Router();
 import { login, signup } from '../controllers/';
 
 
+// Parse the request body
+// then append the data to
+// the request object
 router.use(express.json());
 
 router.post('/login',

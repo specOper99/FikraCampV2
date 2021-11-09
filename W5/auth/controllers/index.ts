@@ -31,6 +31,7 @@ export async function login(req: Request, res: Response, next: NextFunction) {
         });
     res.json({
         id: author.id,
+        privileges: author.privileges,
         token,
     });
 }
@@ -69,6 +70,7 @@ export async function signup(req: Request, res: Response, next: NextFunction) {
         });
     res.json({
         message: "user successfully created",
+        privileges: author.privileges,
         id: author.id,
         token,
     });
