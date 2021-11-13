@@ -1,25 +1,24 @@
-import { DeleteResult, getRepository, Repository } from 'typeorm';
-import authorModel from '../../author/models/author';
+import { DeleteResult, getRepository, Repository, Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import authorModel, { Author } from '../../author/models/author';
 
+@Entity({})
 export class Book {
-    id?: number;
-    title: string;
-    price: number;
-    imagePath: string;
-    authorId: number;
+    @PrimaryGeneratedColumn({})
+    id!: number;
 
-    constructor(title: string, price: number, imagePath: string, authorId: number) {
-        this.title = title;
-        this.price = price;
-        this.imagePath = imagePath;
-        this.authorId = authorId;
-    }
+    @Column({ length: 255 })
+    title!: string;
 
-    static copyFromData = (title: string, price: number, imagePath: string, authorId: number) =>
-        new Book(title, price, imagePath, authorId);
+    @Column()
+    price!: number;
 
-    toString = () =>
-        `${this.title}: ${this.price}, written by ${this.authorId}`;
+    @Column({ length: 255 })
+    imagePath!: string;
+
+    @ManyToOne(type => Author, author => author.books,{
+        nullable: false
+    })
+    author!: number;
 }
 
 
@@ -34,22 +33,25 @@ const bookService = () => {
         Promise<Book | { message: string }> {
         if (!authorModel.getAuthorById(value.authorId))
             return ({ message: "Author not found", })
-        const book = Book.copyFromData(
-            value.title,
-            value.price,
-            value.imagePath,
-            value.authorId);
+        const book = new Book();
+        book.title = value.title;
+        book.price = value.price;
+        book.imagePath = value.imagePath;
+        book.author = value.authorId;
         return await bookRepository.save(book);
     }
 
-    const getBooks = async (bookRepository: Repository<Book> = getRepository('Book')) => await bookRepository.find({
+    const getBooks = async (bookRepository: Repository<Book> = getRepository('Book')
+    ) => await bookRepository.find({
         select: [
             'id',
             'title',
             'price',
             'imagePath',
-            'authorId',
+            'author',
         ],
+        take: 10,
+        skip: 0,
     });
     const getBookById = async (id: number, bookRepository: Repository<Book> = getRepository('Book')) => await bookRepository.findOne(id);
     const deleteBook = async (id: number, bookRepository: Repository<Book> = getRepository('Book')): Promise<DeleteResult | undefined> => await bookRepository.delete(id);

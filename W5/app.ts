@@ -19,13 +19,19 @@ import authorsRoutes from './author/routes/author';
 import booksRoutes from './book/routes/book';
 import authenticationRoutes from './auth/routes/';
 
-import Book from './book/entity/book';
-import Author from './author/entity/author';
+import { Book } from './book/models/book'
+import { Author } from './author/models/author'
 
 import { createConnection } from "typeorm";
+import { createExpressServer } from 'routing-controllers';
+import { AuthController } from './auth/routing-controller';
 
 // create backend application
-const app = express();
+// const app = express();
+
+const app = createExpressServer({
+    controllers: [AuthController], // we specify controllers we want to use
+});
 
 // ! U can use the middleware anywhere inside the express app
 app.use(cors());
@@ -50,7 +56,7 @@ createConnection({
 }).then(connection => {
 
 
-    app.use('/', authenticationRoutes)
+    // app.use('/', authenticationRoutes)
     // we used express static middleware here to serve static files
     app.use('/images', express.static(join(__dirname, 'public', 'images')))
 

@@ -1,31 +1,43 @@
 import { compare, hash } from 'bcrypt';
+import { Book } from '../../book/models/book';
 
-import { getRepository } from 'typeorm';
+import { getRepository, Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
-
+@Entity()
 export class Author {
-    id?: number;
-    name: string;
-    age: number;
-    email: string;
-    password: string;
-    privileges: number;
 
-    constructor(name: string, age: number, email: string, password: string) {
-        this.name = name;
-        this.age = age;
-        this.email = email;
-        this.password = password;
-        this.privileges = 0;
-        if (`${this.email}`.endsWith('@edu.iq'))
-            this.privileges = 1;
+    @PrimaryGeneratedColumn()
+    id!: number;
+
+    @Column({ length: 255 })
+    name!: string;
+
+    @Column()
+    age!: number;
+
+    @Column({ length: 255 })
+    email!: string;
+
+    @Column({ length: 70 })
+    password!: string;
+
+    @Column({ type: "tinyint" })
+    privileges!: number;
+
+    @OneToMany(type => Book, book => book.author)
+    books?: Book[];
+
+    static async createNewAuthor(name: string, age: number, email: string, password: string): Promise<Author> {
+        const author = new Author();
+        author.name = name;
+        author.age = age;
+        author.email = email;
+        author.password = await hash(password, 7);
+        author.privileges = 0;
+        if (email.endsWith("@edu.iq"))
+            author.privileges = 1;
+        return author;
     }
-
-    static copyFromData = (name: string, age: number, email: string, password: string): Author =>
-        new Author(name, age, email, password);
-
-    toString = (): string =>
-        `${this.name} ${this.age}`;
 }
 
 
@@ -48,8 +60,7 @@ const authorService = (): {
         age: number,
     }, authorRepository = getRepository(Author)): Promise<Author | { message: string }> {
         try {
-            const password = await hash(value.password, 7)
-            return (await authorRepository.save(new Author(value.name, value.age, value.email, password)));
+            return (await authorRepository.save(await Author.createNewAuthor(value.name, value.age, value.email, value.password)));
         } catch (err) {
             return { message: `${err}` }
         }
