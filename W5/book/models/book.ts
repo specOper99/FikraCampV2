@@ -1,4 +1,6 @@
-import { DeleteResult, getRepository, Repository, Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { join } from 'path';
+import { unlinkSync } from 'fs';
+import { DeleteResult, getRepository, Repository, Entity, PrimaryGeneratedColumn, Column, ManyToOne, /* Like */ } from 'typeorm';
 import authorModel, { Author } from '../../author/models/author';
 
 @Entity({})
@@ -15,7 +17,7 @@ export class Book {
     @Column({ length: 255 })
     imagePath!: string;
 
-    @ManyToOne(type => Author, author => author.books,{
+    @ManyToOne(type => Author, author => author.books, {
         nullable: false
     })
     author!: number;
@@ -50,11 +52,27 @@ const bookService = () => {
             'imagePath',
             'author',
         ],
+        // where: {
+        //     price:20
+        // },
         take: 10,
         skip: 0,
     });
     const getBookById = async (id: number, bookRepository: Repository<Book> = getRepository('Book')) => await bookRepository.findOne(id);
-    const deleteBook = async (id: number, bookRepository: Repository<Book> = getRepository('Book')): Promise<DeleteResult | undefined> => await bookRepository.delete(id);
+    const deleteBook = async (id: number,
+        bookRepository: Repository<Book> = getRepository('Book')):
+        Promise<DeleteResult | undefined> => {
+        const book = await bookRepository.findOne(id);
+        if (!book)
+            return undefined;
+        let haveError = false;
+        try {
+            unlinkSync(join(__dirname, '..', '..', 'public', book.imagePath));
+            return await bookRepository.delete(id);
+        } catch (error) {
+            return undefined;
+        }
+    };
     const updateBook = async (id: number, updatedBook: {
         title: string,
         price: number,
